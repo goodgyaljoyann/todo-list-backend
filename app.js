@@ -16,7 +16,11 @@ const __dirname = dirname(__filename);
 const app = express();
 
 // Serve static files from the 'uploads' directory
-app.use('/Uploads/images', express.static(join(__dirname, 'Uploads', 'picture')));
+app.use('/Uploads/images', (req, res, next) => {
+    console.log(`Request URL: ${req.url}`);
+    next();
+}, express.static(join(__dirname, 'Uploads', 'images')));
+
 
 // CORS Configuration
 app.use(cors({
