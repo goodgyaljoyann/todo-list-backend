@@ -1,5 +1,5 @@
 import express from 'express';
-import {getAllTasks, createTask, getTasksByUserId, updateTask, updateStatus, deleteTask} from '../Controllers/taskController.js';
+import {getAllTasks, createTask, getTasksByUserId, getTaskById, updateTask, updateStatus, deleteTask} from '../Controllers/taskController.js';
 
 const taskRouter = express.Router();
 
@@ -18,6 +18,7 @@ taskRouter
     .patch(updateStatus);
 taskRouter
     .route('/:id')
+    .get(getTaskById)
     .delete(deleteTask);
 
 export default taskRouter;

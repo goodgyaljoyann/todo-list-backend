@@ -11,19 +11,43 @@ export const getAllTasks = async (req, res) => {
     }
 };
 
+export const getTaskById = async (req, res, _next) => {
+    try {
+        const taskId = req.params.id;
+        let sqlQuery = `SELECT * FROM tasks WHERE id = ?`;
+        const [task] = await pool.query(sqlQuery, [taskId]);
+        //Error handling to check if there is a record or not
+        if (task.length === 0) {
+            return res.status(404).json({
+                status: 'error',
+                message: 'Customer not found'
+            });
+        }
+
+        res.status(200).json({
+            status: 'success',
+            data: { task: task[0] }
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 'error',
+            message: 'Internal server error',
+            error: error.message
+        });
+    }
+};
+
 // Function to get the task by user ID
 export const getTasksByUserId = async (req, res) => {
+
     const { id } = req.params;
 
     try {
-        const tasks = await pool.query(
-            'SELECT * FROM tasks WHERE user_id = ?',
-            [id]
-        );
+        const tasks = await pool.query('SELECT * FROM tasks WHERE user_id = ?', [id]);
         if (tasks[0].length === 0) {
-            return res.status(404).json({ status: 'error', task: 'No tasks found for this user' });
+            return res.status(404).json({ status: 'error', message: 'No tasks found for this user' });
         }
-        res.status(200).json({ status: 'success', data: tasks[0][0] });
+        res.status(200).json({ status: 'success', data: tasks[0] });
     } catch (error) {
         console.error(error);
         res.status(500).json({ status: 'error', message: 'Internal server error' });
