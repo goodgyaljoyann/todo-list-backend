@@ -58,9 +58,9 @@ export const getTasksByUserId = async (req, res) => {
 
 export const createTask = async (req, res) => {
     try {
-      const { user_id, title, description,} = req.body;
+      const { user_id, title, description} = req.body;
       
-      const picture = req.file ? req.file.filename : null;
+      const picture = req.file ? req.file.filename : null; // Retrieve filename if uploaded
 
   
       const query = `INSERT INTO tasks ( user_id, title, description, picture) VALUES (?, ?, ?, ?)`;
